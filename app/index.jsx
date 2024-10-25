@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import { Image, Text, View, ScrollView } from "react-native";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import CustomButton from "../components/CustomButton";
 import { images } from "../constants";
 
 export default function App() {
@@ -39,6 +39,12 @@ export default function App() {
             Where Creativity Meets Innovation: Embark on a Journey of Limitless
             Exploration with Aora
           </Text>
+
+          <CustomButton
+            title="Continue with Email"
+            handlePress={() => {}}
+            containerStyle="w-full mt-7"
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
