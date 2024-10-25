@@ -43,7 +43,7 @@ export default function App() {
           <CustomButton
             title="Continue with Email"
             handlePress={() => {}}
-            containerStyle="w-full mt-7"
+            containerStyles="w-full mt-7"
           />
         </View>
       </ScrollView>
