@@ -1,8 +1,13 @@
-import { Text, View } from "react-native";
-import { Stack } from "expo-router";
+import { Redirect, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
+import { useGlobalContext } from "../../context/GlobalProvider";
+
 const AuthLayout = () => {
+  const { loading, isLogged } = useGlobalContext();
+
+  if (!loading && isLogged) return <Redirect href="/home" />;
+
   return (
     <>
       <Stack>
@@ -18,9 +23,9 @@ const AuthLayout = () => {
             headerShown: false,
           }}
         />
-
-        <StatusBar backgroundColor="#161622" style="light" />
       </Stack>
+
+      <StatusBar backgroundColor="#161622" style="light" />
     </>
   );
 };
