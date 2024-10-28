@@ -2,16 +2,30 @@ import { StatusBar } from "expo-status-bar";
 import { Image, Text, View, ScrollView } from "react-native";
 import { Redirect, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useEffect } from "react";
 
 import { images } from "../constants";
 import CustomButton from "../components/CustomButton";
-
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { getCurrentUser } from "@/lib/appwrite";
 
 export default function App() {
   const { isLoading, isLoggedIn } = useGlobalContext();
 
-  if (!isLoading && isLoggedIn) return <Redirect href="/home" />;
+  useEffect(() => {
+    const checkSession = async () => {
+      const session = await getCurrentUser();
+      if (session) {
+        router.replace("/home");
+      }
+    };
+
+    if (!isLoading) {
+      checkSession();
+    }
+  }, [isLoading]);
+
+  if (isLoading) return <Text>Loading...</Text>;
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -19,7 +33,7 @@ export default function App() {
         <View className="w-full justify-center items-center min-h-[85vh] px-4">
           <Image
             source={images.logo}
-            className="w-[130px] h-[84]"
+            className="w-[130px] h-[84px]"
             resizeMode="contain"
           />
 
@@ -34,7 +48,6 @@ export default function App() {
               Discover Endless Possibilities with{" "}
               <Text className="text-secondary-200">Aora</Text>
             </Text>
-
             <Image
               source={images.path}
               className="w-[136px] h-[15px] absolute -bottom-2 -right-8"
