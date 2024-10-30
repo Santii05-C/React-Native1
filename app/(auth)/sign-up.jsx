@@ -104,3 +104,4 @@ const SignUp = () => {
 };
 
 export default SignUp;
+//2:29
