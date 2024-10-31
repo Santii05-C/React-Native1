@@ -14,7 +14,7 @@ const Home = () => {
   const { data: posts, refetch } = useAppwrite(getAllPosts);
 
   const { data: latesPosts } = useAppwrite(getLatestPost);
-  //2:49
+
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
@@ -57,7 +57,7 @@ const Home = () => {
                 Latest Videos
               </Text>
 
-              <Trending posts={[{ id: 1 }, { id: 2 }, { id: 3 }] ?? []} />
+              <Trending posts={latesPosts ?? []} />
             </View>
           </View>
         )}
