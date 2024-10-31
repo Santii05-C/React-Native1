@@ -7,12 +7,14 @@ import SearchInput from "../../components/SearchInput";
 import Trending from "../../components/Trending";
 import EmptyState from "../../components/EmptyState";
 import VideoCard from "../../components/VideoCard";
-import { getAllPosts } from "../../lib/appwrite";
+import { getAllPosts, getLatestPost } from "../../lib/appwrite";
 import useAppwrite from "../../lib/useAppwrite";
 
 const Home = () => {
   const { data: posts, refetch } = useAppwrite(getAllPosts);
 
+  const { data: latesPosts } = useAppwrite(getLatestPost);
+  //2:49
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
