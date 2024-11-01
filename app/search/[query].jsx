@@ -13,7 +13,7 @@ import { useLocalSearchParams } from "expo-router";
 
 const Search = () => {
   const { query } = useLocalSearchParams;
-  const { data: posts, refetch } = useAppwrite(getAllPosts);
+  const { data: posts, refetch } = useAppwrite(() => searchPosts(query));
 
   useEffect(() => {
     refetch();
