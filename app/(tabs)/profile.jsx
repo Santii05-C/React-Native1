@@ -5,19 +5,25 @@ import SearchInput from "../../components/SearchInput";
 import InfoBox from "../../components/InfoBox";
 import EmptyState from "../../components/EmptyState";
 import VideoCard from "../../components/VideoCard";
-import { getUserPosts } from "../../lib/appwrite";
+import { getUserPosts, signOut } from "../../lib/appwrite";
 import useAppwrite from "../../lib/useAppwrite";
 
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { Image } from "react-native";
 import { icons } from "../../constants";
 
+import { router } from "expo-router";
+
 const Profile = () => {
-  const { user, setUser, setIsLoggedIn } = useGlobalContext();
+  const { user, setUser, setIsLogged } = useGlobalContext();
   const { data: posts } = useAppwrite(() => getUserPosts(user.$id));
 
-  const logout = () => {
-    //3:29
+  const logout = async () => {
+    await signOut();
+    setUser(null);
+    setIsLogged(false);
+
+    router.replace("/sign-in");
   };
 
   return (
