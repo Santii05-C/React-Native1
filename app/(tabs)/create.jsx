@@ -2,8 +2,10 @@ import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Video, ResizeMode } from "expo-av";
+import * as DocumentPicker from "expo-document-picker";
 
 import FormField from "../../components/FormField";
+import CustomButton from "../../components/CustomButton";
 import { icons } from "../../constants";
 
 const Create = () => {
@@ -15,10 +17,31 @@ const Create = () => {
     prompt: "",
   });
 
+  const openPicker = async (selectType) => {
+    const result = await DocumentPicker.getDocumentAsync({
+      type:
+        selectType === "image"
+          ? ["image/png", "image/jpg"]
+          : ["video/mp4", "video/gif"],
+    });
+
+    if (!result.canceled) {
+      if (selectType === "image") {
+        setForm({ ...form, thumbnail: result.assets[0] });
+      }
+
+      if (selectType === "image") {
+        setForm({ ...form, thumbnail: result.assets[0] });
+      }
+    }
+  };
+  const submit = () => {};
+
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView className="px-4 my-6">
         <Text className="text-2xl text-white font-psemibold">Upload Video</Text>
+
         <FormField
           title="Video Title"
           value={form.title}
@@ -32,7 +55,7 @@ const Create = () => {
             Upload Video
           </Text>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => openPicker("video")}>
             {form.video ? (
               <Video
                 source={{ uri: form.video.uri }}
@@ -59,7 +82,7 @@ const Create = () => {
             Thumbnail Image
           </Text>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => openPicker("image")}>
             {form.thumbnail ? (
               <Image
                 source={{ uri: form.thumbnail.uri }}
@@ -71,12 +94,29 @@ const Create = () => {
                 <Image
                   source={icons.upload}
                   resizeMode="contain"
-                  className="w-1/2 h-1/2"
+                  className="w-5 h-5"
                 />
+                <Text className=" text-sm text-gray-100 font-pmedium">
+                  Choose a file
+                </Text>
               </View>
             )}
           </TouchableOpacity>
         </View>
+
+        <FormField
+          title="AI Prompt"
+          value={form.prompt}
+          placeholder="The prompt you used to create this video"
+          handleChangeText={(e) => setForm({ ...form, prompt: e })}
+          otherStyles="mt-7"
+        />
+        <CustomButton
+          title="Submit & Publish"
+          handlePress={submit}
+          containerStyles="mt-7"
+          isLoading={uploading}
+        />
       </ScrollView>
     </SafeAreaView>
   );
