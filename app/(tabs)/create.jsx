@@ -1,12 +1,20 @@
-import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Video, ResizeMode } from "expo-av";
 import * as DocumentPicker from "expo-document-picker";
-
+import { router } from "expo-router";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { icons } from "../../constants";
+import { router } from "expo-router";
 
 const Create = () => {
   const [uploading, setUploading] = useState(false);
@@ -33,9 +41,36 @@ const Create = () => {
       if (selectType === "image") {
         setForm({ ...form, thumbnail: result.assets[0] });
       }
+    } else {
+      setTimeout(() => {
+        Alert.alert("Document picked", JSON.stringify(result, null, 2));
+      }, 100);
     }
   };
-  const submit = () => {};
+
+  const submit = () => {
+    if (!form.prompt || !form.title || !form.thumbnail || !form.video) {
+      return Alert.alert("Please fill in all the fields");
+    }
+
+    setUploading(true);
+
+    try {
+      Alert.alert("Success", "Post uploaded successfully");
+      router.push("/home");
+    } catch (error) {
+      Alert.alert("Error", error.amessage);
+    } finally {
+      setForm({
+        title: "",
+        video: null,
+        thumbnail: null,
+        prompt: "",
+      });
+
+      setUploading(false);
+    }
+  };
 
   return (
     <SafeAreaView className="bg-primary h-full">
