@@ -11,11 +11,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Video, ResizeMode } from "expo-av";
 import * as DocumentPicker from "expo-document-picker";
 import { router } from "expo-router";
-import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
+import FormField from "../../components/FormField";
 import { icons } from "../../constants";
+import { createVideo } from "../../lib/appwrite";
+import { useGlobalContext } from "../../context/GlobalProvider";
 
 const Create = () => {
+  const { user } = useGlobalContext();
   const [uploading, setUploading] = useState(false);
   const [form, setForm] = useState({
     title: "",
@@ -40,14 +43,10 @@ const Create = () => {
       if (selectType === "image") {
         setForm({ ...form, thumbnail: result.assets[0] });
       }
-    } else {
-      setTimeout(() => {
-        Alert.alert("Document picked", JSON.stringify(result, null, 2));
-      }, 100);
     }
   };
 
-  const submit = () => {
+  const submit = async () => {
     if (!form.prompt || !form.title || !form.thumbnail || !form.video) {
       return Alert.alert("Please fill in all the fields");
     }
@@ -55,6 +54,11 @@ const Create = () => {
     setUploading(true);
 
     try {
+      await createVideo({
+        ...form,
+        userId: user.$id,
+      });
+
       Alert.alert("Success", "Post uploaded successfully");
       router.push("/home");
     } catch (error) {
@@ -94,9 +98,7 @@ const Create = () => {
               <Video
                 source={{ uri: form.video.uri }}
                 className="w-full h-64 rounded-2xl "
-                useNativeControls
                 resizeMode={ResizeMode.COVER}
-                isLooping
               />
             ) : (
               <View className="w-full h-40 px-4 bg-black-100 rounded-2xl justify-center items-center">
