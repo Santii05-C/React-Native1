@@ -14,7 +14,6 @@ import { router } from "expo-router";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { icons } from "../../constants";
-import { router } from "expo-router";
 
 const Create = () => {
   const [uploading, setUploading] = useState(false);
