@@ -9,7 +9,7 @@ import {
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Video, ResizeMode } from "expo-av";
-import * as DocumentPicker from "expo-document-picker";
+import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import CustomButton from "../../components/CustomButton";
 import FormField from "../../components/FormField";
@@ -28,13 +28,16 @@ const Create = () => {
   });
 
   const openPicker = async (selectType) => {
-    const result = await DocumentPicker.getDocumentAsync({
-      type:
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes:
         selectType === "image"
-          ? ["image/png", "image/jpg", "image/jpeg"]
-          : ["video/mp4", "video/gif"],
+          ? ImagePicker.MediaTypeOptions.Images
+          : Image.MediaTypeOptions.Videos,
+      allowEditing: true,
+      aspect: [4, 3],
+      quality: 1,
     });
-
+    //4:16
     if (!result.canceled) {
       if (selectType === "image") {
         setForm({ ...form, thumbnail: result.assets[0] });
